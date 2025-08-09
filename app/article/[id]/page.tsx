@@ -1,3 +1,9 @@
+"use client"
+
+import { useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Checkbox } from "@/components/ui/checkbox"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -95,6 +101,141 @@ const relatedArticles = [
     image: "/placeholder.svg?height=100&width=150",
   },
 ]
+
+
+// Add this StarRating component after data constants
+function StarRating({
+  rating,
+  onRatingChange,
+  size = "w-6 h-6",
+}: {
+  rating: number
+  onRatingChange: (rating: number) => void
+  size?: string
+}) {
+  const [hoverRating, setHoverRating] = useState(0)
+
+  return (
+    <div className="flex items-center space-x-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          className={`${size} transition-colors ${
+            star <= (hoverRating || rating) ? "text-yellow-500" : "text-gray-300"
+          }`}
+          onMouseEnter={() => setHoverRating(star)}
+          onMouseLeave={() => setHoverRating(0)}
+          onClick={() => onRatingChange(star)}
+        >
+          ★
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// Add this RatingModal component after StarRating
+function RatingModal() {
+  const [overallRating, setOverallRating] = useState(0)
+  const [imageQuality, setImageQuality] = useState(0)
+  const [contentQuality, setContentQuality] = useState(0)
+  const [accuracy, setAccuracy] = useState(0)
+  const [isAnonymous, setIsAnonymous] = useState(false)
+
+  const handleSubmit = () => {
+    console.log({
+      overall: overallRating,
+      imageQuality,
+      contentQuality,
+      accuracy,
+      anonymous: isAnonymous,
+    })
+    // Here you would typically send the rating to your backend
+    alert("Cảm ơn bạn đã đánh giá!")
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="border border-blue-500 p-4 rounded-md flex justify-between items-center cursor-pointer hover:bg-blue-50 transition-colors">
+          <div className="flex items-center gap-2">
+            <span className="text-yellow-500">★ ★ ★ ★ ☆</span>
+            <span className="font-medium">4.2</span>
+            <span className="text-gray-500">• 1247 đánh giá</span>
+          </div>
+          <div className="flex flex-col items-center text-gray-500">
+            <span>Đánh giá bài viết này</span>
+            <span>☆ ☆ ☆ ☆ ☆</span>
+          </div>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Amazon chi 100 tỷ USD để nắm cơ hội 'ngàn năm có một' trong AI</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {/* Overall Rating Display */}
+          <div className="flex items-center gap-2">
+            <span className="text-yellow-500">★ ★ ★ ★ ☆</span>
+            <span className="font-medium">4.2</span>
+            <span className="text-gray-500">• 1247 đánh giá</span>
+          </div>
+
+          {/* User Rating Section */}
+          <div>
+            <h3 className="font-medium mb-3">Đánh giá bài viết này</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <StarRating rating={overallRating} onRatingChange={setOverallRating} size="w-8 h-8" />
+              {overallRating > 0 && <span className="text-sm text-gray-600">({overallRating}/5)</span>}
+            </div>
+          </div>
+
+          {/* Detailed Ratings */}
+          <div>
+            <h3 className="font-medium mb-3">Đánh giá chi tiết (tùy chọn)</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Chất lượng hình ảnh</span>
+                <StarRating rating={imageQuality} onRatingChange={setImageQuality} />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Chất lượng nội dung</span>
+                <StarRating rating={contentQuality} onRatingChange={setContentQuality} />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Độ chính xác</span>
+                <StarRating rating={accuracy} onRatingChange={setAccuracy} />
+              </div>
+            </div>
+          </div>
+
+          {/* Anonymous Option */}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="anonymous"
+              checked={isAnonymous}
+              onCheckedChange={(checked) => setIsAnonymous(checked as boolean)}
+            />
+            <label htmlFor="anonymous" className="text-sm">
+              Đánh giá ẩn danh
+            </label>
+          </div>
+
+          {/* Submit Button */}
+          <Button
+            onClick={handleSubmit}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+            disabled={overallRating === 0}
+          >
+            Gửi đánh giá
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 export default function ArticlePage({ params }: { params: { id: string } }) {
   return (
@@ -224,21 +365,40 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
               </CardContent>
             </Card>
 
+              {/* Rating */}
+              <RatingModal />
+              {/* ** rest of code here ** */}
+
+
+
             {/* Comments Section */}
             <div className="space-y-6">
               <h3 className="text-xl font-bold">Bình luận ({article.comments})</h3>
-
               {/* Comment Form */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <Textarea placeholder="Viết bình luận của bạn..." rows={4} />
-                    <div className="flex justify-end">
-                      <Button>Gửi bình luận</Button>
+              <div>
+                <h3 className="font-bold mb-2">Bình luận (0)</h3>
+                <Card>
+                  <CardContent className="p-6 space-y-4">
+                    <div className="relative">
+                      <Textarea
+                        placeholder="Chia sẻ ý kiến của bạn"
+                        rows={4}
+                        className="pr-10"
+                      />
+                      {/* Smile Icon */}
+                      <span className="absolute bottom-3 right-3 text-gray-400 cursor-pointer">
+                        😊
+                      </span>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    <div className="flex justify-end">
+                      <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+                        Gửi bình luận
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
 
               {/* Comments List */}
               <div className="space-y-4">
@@ -338,3 +498,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
     </div>
   )
 }
+
+
+
+
