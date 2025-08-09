@@ -136,12 +136,14 @@ function StarRating({
 }
 
 // Add this RatingModal component after StarRating
-function RatingModal() {
+function RatingModal({ article }: { article: { title: string } }) {
   const [overallRating, setOverallRating] = useState(0)
   const [imageQuality, setImageQuality] = useState(0)
   const [contentQuality, setContentQuality] = useState(0)
   const [accuracy, setAccuracy] = useState(0)
   const [isAnonymous, setIsAnonymous] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const handleSubmit = () => {
     console.log({
@@ -152,11 +154,24 @@ function RatingModal() {
       anonymous: isAnonymous,
     })
     // Here you would typically send the rating to your backend
-    alert("Cảm ơn bạn đã đánh giá!")
+    setIsSubmitted(true)
+  }
+
+  const handleClose = () => {
+    setIsOpen(false)
+    // Reset form after closing
+    setTimeout(() => {
+      setIsSubmitted(false)
+      setOverallRating(0)
+      setImageQuality(0)
+      setContentQuality(0)
+      setAccuracy(0)
+      setIsAnonymous(false)
+    }, 300)
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <div className="border border-blue-500 p-4 rounded-md flex justify-between items-center cursor-pointer hover:bg-blue-50 transition-colors">
           <div className="flex items-center gap-2">
@@ -172,66 +187,122 @@ function RatingModal() {
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Amazon chi 100 tỷ USD để nắm cơ hội 'ngàn năm có một' trong AI</DialogTitle>
+          <DialogTitle>{article.title}</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Overall Rating Display */}
-          <div className="flex items-center gap-2">
-            <span className="text-yellow-500">★ ★ ★ ★ ☆</span>
-            <span className="font-medium">4.2</span>
-            <span className="text-gray-500">• 1247 đánh giá</span>
-          </div>
-
-          {/* User Rating Section */}
-          <div>
-            <h3 className="font-medium mb-3">Đánh giá bài viết này</h3>
-            <div className="flex items-center gap-2 mb-4">
-              <StarRating rating={overallRating} onRatingChange={setOverallRating} size="w-8 h-8" />
-              {overallRating > 0 && <span className="text-sm text-gray-600">({overallRating}/5)</span>}
+        {!isSubmitted ? (
+          // Rating Form
+          <div className="space-y-6">
+            {/* Overall Rating Display */}
+            <div className="flex items-center gap-2">
+              <span className="text-yellow-500">★ ★ ★ ★ ☆</span>
+              <span className="font-medium">4.2</span>
+              <span className="text-gray-500">• 1247 đánh giá</span>
             </div>
-          </div>
 
-          {/* Detailed Ratings */}
-          <div>
-            <h3 className="font-medium mb-3">Đánh giá chi tiết (tùy chọn)</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Chất lượng hình ảnh</span>
-                <StarRating rating={imageQuality} onRatingChange={setImageQuality} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Chất lượng nội dung</span>
-                <StarRating rating={contentQuality} onRatingChange={setContentQuality} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Độ chính xác</span>
-                <StarRating rating={accuracy} onRatingChange={setAccuracy} />
+            {/* User Rating Section */}
+            <div>
+              <h3 className="font-medium mb-3">Đánh giá bài viết này</h3>
+              <div className="flex items-center gap-2 mb-4">
+                <StarRating rating={overallRating} onRatingChange={setOverallRating} size="w-8 h-8" />
+                {overallRating > 0 && <span className="text-sm text-gray-600">({overallRating}/5)</span>}
               </div>
             </div>
-          </div>
 
-          {/* Anonymous Option */}
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="anonymous"
-              checked={isAnonymous}
-              onCheckedChange={(checked) => setIsAnonymous(checked as boolean)}
-            />
-            <label htmlFor="anonymous" className="text-sm">
-              Đánh giá ẩn danh
-            </label>
-          </div>
+            {/* Detailed Ratings */}
+            <div>
+              <h3 className="font-medium mb-3">Đánh giá chi tiết (tùy chọn)</h3>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Chất lượng hình ảnh</span>
+                  <StarRating rating={imageQuality} onRatingChange={setImageQuality} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Chất lượng nội dung</span>
+                  <StarRating rating={contentQuality} onRatingChange={setContentQuality} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Độ chính xác</span>
+                  <StarRating rating={accuracy} onRatingChange={setAccuracy} />
+                </div>
+              </div>
+            </div>
 
-          {/* Submit Button */}
-          <Button
-            onClick={handleSubmit}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-            disabled={overallRating === 0}
-          >
-            Gửi đánh giá
-          </Button>
-        </div>
+            {/* Anonymous Option */}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="anonymous"
+                checked={isAnonymous}
+                onCheckedChange={(checked) => setIsAnonymous(checked as boolean)}
+              />
+              <label htmlFor="anonymous" className="text-sm">
+                Đánh giá ẩn danh
+              </label>
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              onClick={handleSubmit}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+              disabled={overallRating === 0}
+            >
+              Gửi đánh giá
+            </Button>
+          </div>
+        ) : (
+          // Success State
+          <div className="space-y-6">
+            {/* Success Message */}
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center text-green-700">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="font-medium">Cảm ơn bạn đã đánh giá!</span>
+              </div>
+            </div>
+
+            {/* User's Rating */}
+            <div>
+              <h3 className="font-medium mb-3">Đánh giá của bạn</h3>
+              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm">
+                  ?
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{isAnonymous ? "Người dùng ẩn danh" : "Nguyễn Văn A"}</div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex text-yellow-500">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span key={star}>{star <= overallRating ? "★" : "☆"}</span>
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-500">({overallRating}/5)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Updated Article Rating */}
+            <div>
+              <h3 className="font-medium mb-3">Đánh giá bài viết</h3>
+              <div className="flex items-center space-x-2">
+                <div className="flex text-yellow-500">★ ★ ★ ★ ☆</div>
+                <span className="font-medium">4.2</span>
+                <span className="text-gray-500">(1248 đánh giá)</span>
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <Button onClick={handleClose} className="w-full bg-gray-500 hover:bg-gray-600 text-white">
+              Đóng
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   )
@@ -366,7 +437,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
             </Card>
 
               {/* Rating */}
-              <RatingModal />
+              <RatingModal article={article} />
               {/* ** rest of code here ** */}
 
 
