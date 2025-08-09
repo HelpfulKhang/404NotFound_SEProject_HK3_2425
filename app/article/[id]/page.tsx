@@ -209,6 +209,8 @@ function RatingModal({ article }: { article: { title: string } }) {
               </div>
             </div>
 
+            
+
             {/* Detailed Ratings */}
             <div>
               <h3 className="font-medium mb-3">Đánh giá chi tiết (tùy chọn)</h3>
