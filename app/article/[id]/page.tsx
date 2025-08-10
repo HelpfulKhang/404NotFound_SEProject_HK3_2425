@@ -1,9 +1,9 @@
 "use client"
 
+import type React from "react"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -27,28 +27,7 @@ import Image from "next/image"
 const article = {
   id: 1,
   title: "Công nghệ AI đang thay đổi cách chúng ta làm việc trong năm 2024",
-  content: `
-    <p>Trí tuệ nhân tạo (AI) đã không còn là một khái niệm xa vời mà đã trở thành một phần không thể thiếu trong cuộc sống và công việc hàng ngày của chúng ta. Năm 2024 đánh dấu một bước ngoặt quan trọng trong việc ứng dụng AI vào các lĩnh vực khác nhau.</p>
-    
-    <h2>Tác động của AI đến thị trường lao động</h2>
-    <p>Theo nghiên cứu mới nhất từ McKinsey Global Institute, AI có thể tự động hóa khoảng 30% các công việc hiện tại vào năm 2030. Tuy nhiên, điều này không có nghĩa là sẽ có 30% lao động bị thất nghiệp, mà thay vào đó, bản chất công việc sẽ thay đổi.</p>
-    
-    <p>Các công việc đòi hỏi tư duy sáng tạo, giải quyết vấn đề phức tạp và tương tác con người sẽ trở nên quan trọng hơn bao giờ hết. Trong khi đó, các tác vụ lặp đi lặp lại, có thể dự đoán được sẽ được AI đảm nhận.</p>
-    
-    <h2>Những ứng dụng AI nổi bật trong năm 2024</h2>
-    <p>Một số ứng dụng AI đáng chú ý trong năm nay bao gồm:</p>
-    <ul>
-      <li><strong>Chatbot và trợ lý ảo:</strong> Ngày càng thông minh và có thể xử lý các yêu cầu phức tạp</li>
-      <li><strong>Phân tích dữ liệu:</strong> Giúp doanh nghiệp đưa ra quyết định chính xác hơn</li>
-      <li><strong>Tự động hóa quy trình:</strong> Tối ưu hóa hiệu quả làm việc</li>
-      <li><strong>Cá nhân hóa trải nghiệm:</strong> Từ mua sắm đến giáo dục</li>
-    </ul>
-    
-    <h2>Thách thức và cơ hội</h2>
-    <p>Mặc dù AI mang lại nhiều lợi ích, nhưng cũng đặt ra những thách thức về đạo đức, quyền riêng tư và an ninh dữ liệu. Các doanh nghiệp và cá nhân cần chuẩn bị kỹ năng mới để thích ứng với thời đại AI.</p>
-    
-    <p>Việt Nam đang có những bước tiến đáng kể trong việc phát triển và ứng dụng AI, với nhiều startup công nghệ và các dự án nghiên cứu được đầu tư mạnh mẽ.</p>
-  `,
+  content: `    <p>Trí tuệ nhân tạo (AI) đã không còn là một khái niệm xa vời mà đã trở thành một phần không thể thiếu trong cuộc sống và công việc hàng ngày của chúng ta. Năm 2024 đánh dấu một bước ngoặt quan trọng trong việc ứng dụng AI vào các lĩnh vực khác nhau.</p>    <h2>Tác động của AI đến thị trường lao động</h2>    <p>Theo nghiên cứu mới nhất từ McKinsey Global Institute, AI có thể tự động hóa khoảng 30% các công việc hiện tại vào năm 2030. Tuy nhiên, điều này không có nghĩa là sẽ có 30% lao động bị thất nghiệp, mà thay vào đó, bản chất công việc sẽ thay đổi.</p>    <p>Các công việc đòi hỏi tư duy sáng tạo, giải quyết vấn đề phức tạp và tương tác con người sẽ trở nên quan trọng hơn bao giờ hết. Trong khi đó, các tác vụ lặp đi lặp lại, có thể dự đoán được sẽ được AI đảm nhận.</p>    <h2>Những ứng dụng AI nổi bật trong năm 2024</h2>    <p>Một số ứng dụng AI đáng chú ý trong năm nay bao gồm:</p>    <ul>      <li><strong>Chatbot và trợ lý ảo:</strong> Ngày càng thông minh và có thể xử lý các yêu cầu phức tạp</li>      <li><strong>Phân tích dữ liệu:</strong> Giúp doanh nghiệp đưa ra quyết định chính xác hơn</li>      <li><strong>Tự động hóa quy trình:</strong> Tối ưu hóa hiệu quả làm việc</li>      <li><strong>Cá nhân hóa trải nghiệm:</strong> Từ mua sắm đến giáo dục</li>    </ul>    <h2>Thách thức và cơ hội</h2>    <p>Mặc dù AI mang lại nhiều lợi ích, nhưng cũng đặt ra những thách thức về đạo đức, quyền riêng tư và an ninh dữ liệu. Các doanh nghiệp và cá nhân cần chuẩn bị kỹ năng mới để thích ứng với thời đại AI.</p>    <p>Việt Nam đang có những bước tiến đáng kể trong việc phát triển và ứng dụng AI, với nhiều startup công nghệ và các dự án nghiên cứu được đầu tư mạnh mẽ.</p>  `,
   category: "Công nghệ",
   author: {
     name: "Nguyễn Văn A",
@@ -64,9 +43,11 @@ const article = {
   dislikes: 3,
   image: "/placeholder.svg?height=400&width=800",
   tags: ["AI", "Công nghệ", "Tương lai", "Việc làm"],
+  rating: 4.2, // Added for consistency
+  ratingCount: 1247, // Added for consistency
 }
 
-const comments = [
+const initialComments = [
   {
     id: 1,
     author: "Trần Thị B",
@@ -102,8 +83,6 @@ const relatedArticles = [
   },
 ]
 
-
-// Add this StarRating component after data constants
 function StarRating({
   rating,
   onRatingChange,
@@ -135,8 +114,13 @@ function StarRating({
   )
 }
 
-// Add this RatingModal component after StarRating
-function RatingModal({ article }: { article: { title: string } }) {
+function RatingModal({
+  article,
+  onRatingComplete,
+}: {
+  article: { title: string; rating: number; ratingCount: number }
+  onRatingComplete: (rating: number, anonymous: boolean) => void
+}) {
   const [overallRating, setOverallRating] = useState(0)
   const [imageQuality, setImageQuality] = useState(0)
   const [contentQuality, setContentQuality] = useState(0)
@@ -147,14 +131,18 @@ function RatingModal({ article }: { article: { title: string } }) {
 
   const handleSubmit = () => {
     console.log({
+      title: article.title, // ghi lại tiêu đề bài viết
       overall: overallRating,
       imageQuality,
       contentQuality,
       accuracy,
       anonymous: isAnonymous,
+      time: new Date().toISOString(), // thời điểm đánh giá
     })
-    // Here you would typically send the rating to your backend
-    setIsSubmitted(true)
+    // Callback cho parent
+    onRatingComplete(overallRating, isAnonymous)
+    setIsSubmitted(true) // Show success state inside modal
+    // Do NOT close modal immediately here, let user click "Đóng"
   }
 
   const handleClose = () => {
@@ -176,8 +164,8 @@ function RatingModal({ article }: { article: { title: string } }) {
         <div className="border border-blue-500 p-4 rounded-md flex justify-between items-center cursor-pointer hover:bg-blue-50 transition-colors">
           <div className="flex items-center gap-2">
             <span className="text-yellow-500">★ ★ ★ ★ ☆</span>
-            <span className="font-medium">4.2</span>
-            <span className="text-gray-500">• 1247 đánh giá</span>
+            <span className="font-medium">{article.rating}</span>
+            <span className="text-gray-500">• {article.ratingCount} đánh giá</span>
           </div>
           <div className="flex flex-col items-center text-gray-500">
             <span>Đánh giá bài viết này</span>
@@ -196,8 +184,8 @@ function RatingModal({ article }: { article: { title: string } }) {
             {/* Overall Rating Display */}
             <div className="flex items-center gap-2">
               <span className="text-yellow-500">★ ★ ★ ★ ☆</span>
-              <span className="font-medium">4.2</span>
-              <span className="text-gray-500">• 1247 đánh giá</span>
+              <span className="font-medium">{article.rating}</span>
+              <span className="text-gray-500">• {article.ratingCount} đánh giá</span>
             </div>
 
             {/* User Rating Section */}
@@ -208,8 +196,6 @@ function RatingModal({ article }: { article: { title: string } }) {
                 {overallRating > 0 && <span className="text-sm text-gray-600">({overallRating}/5)</span>}
               </div>
             </div>
-
-            
 
             {/* Detailed Ratings */}
             <div>
@@ -311,6 +297,36 @@ function RatingModal({ article }: { article: { title: string } }) {
 }
 
 export default function ArticlePage({ params }: { params: { id: string } }) {
+  const [hasRated, setHasRated] = useState(false)
+  const [userRating, setUserRating] = useState(0)
+  const [isAnonymous, setIsAnonymous] = useState(false)
+  const [newCommentContent, setNewCommentContent] = useState("")
+  const [currentComments, setCurrentComments] = useState(initialComments) // State for comments
+
+  // Simulate the rating completion
+  const handleRatingComplete = (rating: number, anonymous: boolean) => {
+    setHasRated(true)
+    setUserRating(rating)
+    setIsAnonymous(anonymous)
+  }
+
+  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault() // Prevent default form submission
+    if (newCommentContent.trim() === "") return
+
+    const newComment = {
+      id: currentComments.length + 1, // Simple unique ID
+      author: "Người dùng mới", // Placeholder for current user
+      content: newCommentContent,
+      publishedAt: "Vừa xong", // "Just now"
+      likes: 0,
+      avatar: "/placeholder.svg", // Placeholder avatar
+    }
+
+    setCurrentComments((prevComments) => [newComment, ...prevComments]) // Add new comment to the top
+    setNewCommentContent("") // Clear the input field
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -335,13 +351,12 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
                     </Link>
                     <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                       <Clock className="h-3 w-3" />
-                      <span>15 tháng 1, 2024</span>
+                      <span>{new Date(article.publishedAt).toLocaleDateString("vi-VN")}</span>
                       <span>•</span>
                       <span>{article.readTime}</span>
                     </div>
                   </div>
                 </div>
-
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                     <div className="flex items-center space-x-1">
@@ -353,7 +368,6 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
                       <span>{article.comments}</span>
                     </div>
                   </div>
-
                   <div className="flex items-center space-x-2">
                     <Button variant="ghost" size="sm">
                       <Bookmark className="h-4 w-4" />
@@ -403,7 +417,6 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
                   {article.dislikes}
                 </Button>
               </div>
-
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-muted-foreground">Chia sẻ:</span>
                 <Button variant="ghost" size="sm">
@@ -430,7 +443,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
                     <h3 className="font-bold text-lg">{article.author.name}</h3>
                     <p className="text-muted-foreground mb-2">{article.author.bio}</p>
                     <p className="text-sm text-muted-foreground">{article.author.articles} bài viết đã xuất bản</p>
-                    <Button variant="outline" size="sm" className="mt-3" asChild>
+                    <Button variant="outline" size="sm" className="mt-3 bg-transparent" asChild>
                       <Link href="/author/nguyen-van-a">Xem trang tác giả</Link>
                     </Button>
                   </div>
@@ -438,44 +451,79 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
               </CardContent>
             </Card>
 
-              {/* Rating */}
-              <RatingModal article={article} />
-              {/* ** rest of code here ** */}
+            {/* Rating Results Section */}
+            {hasRated ? (
+              <div className="space-y-4">
+                {/* User's Rating */}
+                <div>
+                  <h3 className="font-medium mb-3">Đánh giá của bạn</h3>
+                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm">
+                      ?
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">{isAnonymous ? "Người dùng ẩn danh" : "Nguyễn Văn A"}</div>
+                      <div className="flex items-center space-x-2">
+                        <div className="flex text-yellow-500">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <span key={star}>{star <= userRating ? "★" : "☆"}</span>
+                          ))}
+                        </div>
+                        <span className="text-sm text-gray-500">({userRating}/5)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-
+                {/* Article Rating */}
+                <div>
+                  <h3 className="font-medium mb-3">Đánh giá bài viết</h3>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex text-yellow-500">★ ★ ★ ★ ☆</div>
+                    <span className="font-medium">{article.rating}</span>
+                    <span className="text-gray-500">({article.ratingCount + 1} đánh giá)</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <RatingModal article={article} onRatingComplete={handleRatingComplete} />
+            )}
 
             {/* Comments Section */}
             <div className="space-y-6">
-              <h3 className="text-xl font-bold">Bình luận ({article.comments})</h3>
+              <h3 className="text-xl font-bold">Bình luận ({currentComments.length})</h3> {/* Updated comment count */}
               {/* Comment Form */}
               <div>
-                <h3 className="font-bold mb-2">Bình luận (0)</h3>
+                <h3 className="font-bold mb-2">Bình luận ({currentComments.length})</h3>
                 <Card>
                   <CardContent className="p-6 space-y-4">
-                    <div className="relative">
-                      <Textarea
-                        placeholder="Chia sẻ ý kiến của bạn"
-                        rows={4}
-                        className="pr-10"
-                      />
-                      {/* Smile Icon */}
-                      <span className="absolute bottom-3 right-3 text-gray-400 cursor-pointer">
-                        😊
-                      </span>
-                    </div>
-                    <div className="flex justify-end">
-                      <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-                        Gửi bình luận
-                      </Button>
-                    </div>
+                    <form onSubmit={handleCommentSubmit}>
+                      {" "}
+                      {/* Wrap in form and add onSubmit */}
+                      <div className="relative">
+                        <Textarea
+                          placeholder="Chia sẻ ý kiến của bạn"
+                          rows={4}
+                          className="pr-10"
+                          value={newCommentContent} // Bind value to state
+                          onChange={(e) => setNewCommentContent(e.target.value)} // Update state on change
+                        />
+                        <span className="absolute bottom-3 right-3 text-gray-400 cursor-pointer">😊</span>
+                      </div>
+                      <div className="flex justify-end mt-4">
+                        {" "}
+                        {/* Added mt-4 for spacing */}
+                        <Button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white">
+                          Gửi bình luận
+                        </Button>
+                      </div>
+                    </form>
                   </CardContent>
                 </Card>
               </div>
-
-
               {/* Comments List */}
               <div className="space-y-4">
-                {comments.map((comment) => (
+                {currentComments.map((comment) => (
                   <Card key={comment.id}>
                     <CardContent className="p-6">
                       <div className="flex items-start space-x-4">
@@ -548,7 +596,6 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
               </div>
             </CardContent>
           </Card>
-
           {/* Newsletter */}
           <Card>
             <CardContent className="p-6">
@@ -571,7 +618,3 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
     </div>
   )
 }
-
-
-
-
