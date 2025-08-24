@@ -35,7 +35,7 @@ creation, editorial review, user management, and analytics.
 
 ## INSTALLATION INSTRUCTIONS
 1. Clone repository:
-git clone https://github.com/your-org/digital-newspaper.git cd digital-newspaper
+git clone https://github.com/HelpfulKhang/404NotFound_SEProject_HK3_2425.git cd digital-newspaper
 
 2. Set up environment variables:
 cp .env.example .env cd client && cp.env.example .env cd ../server && cp .env.example .env
