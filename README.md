@@ -92,3 +92,7 @@ docker exec -it newspaper_db psql -U postgres -d newspaper -f /docker-entrypoint
 - Lê Đình Minh Quân -- Frontend Developer
 - Thạch Ngọc Hân -- Tester
 - Lê Thị Minh Thư -- Tester & Business Analyst
+
+## RUNNING INSTRUCTIONS
+`npm i --legacy-peer-deps`
+`npm run dev`
