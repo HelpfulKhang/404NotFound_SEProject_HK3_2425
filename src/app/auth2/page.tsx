@@ -5,13 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, Chrome, Facebook, User } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAuth } from "@/hooks/use-auth"
 import { toast } from "sonner"
-import { supabase } from "@/lib/supabase"
 
-// Wrap client hooks like useSearchParams within a Suspense boundary to satisfy Next.js build requirements
 export default function AuthPage() {
   return (
     <Suspense fallback={null}>
@@ -27,28 +25,17 @@ function AuthPageContent() {
   const [loading, setLoading] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
-  const { signIn, signUp } = useAuth()
+  const { signIn, signUp, signInWithGoogle, signInWithFacebook } = useAuth()
 
   const [loginData, setLoginData] = useState({ email: '', password: '' })
   const [registerData, setRegisterData] = useState({ email: '', password: '', confirm: '', fullName: '', role: 'reader' })
-  const [pendingConfirmEmail, setPendingConfirmEmail] = useState(false)
-  const [emailToConfirm, setEmailToConfirm] = useState("")
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     const { error } = await signIn(loginData.email, loginData.password)
     setLoading(false)
-    if (error) {
-      if (String(error.message || '').toLowerCase().includes('email not confirmed')) {
-        setPendingConfirmEmail(true)
-        setEmailToConfirm(loginData.email)
-        toast.error('Email chưa được xác nhận. Vui lòng xác nhận email trước khi đăng nhập.')
-      } else {
-        toast.error(error.message)
-      }
-      return
-    }
+    if (error) return toast.error(error.message)
     const redirectTo = searchParams.get('redirectTo')
     router.replace(redirectTo ? decodeURIComponent(redirectTo) : '/')
   }
@@ -61,19 +48,8 @@ function AuthPageContent() {
     const { error } = await signUp(registerData.email, registerData.password, registerData.fullName, registerData.role)
     setLoading(false)
     if (error) return toast.error(error.message)
-    toast.success('Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản')
-    setPendingConfirmEmail(true)
-    setEmailToConfirm(registerData.email)
+    toast.success('Đăng ký thành công! Vui lòng đăng nhập')
     setMode('login')
-  }
-
-  const resendConfirmation = async () => {
-    if (!emailToConfirm) return
-    setLoading(true)
-    const { error } = await supabase.auth.resend({ type: 'signup', email: emailToConfirm } as any)
-    setLoading(false)
-    if (error) return toast.error(error.message)
-    toast.success('Đã gửi lại email xác nhận')
   }
 
   return (
@@ -98,14 +74,6 @@ function AuthPageContent() {
 
           {mode==='login' ? (
             <form onSubmit={handleLogin} className="space-y-6">
-              {pendingConfirmEmail && (
-                <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2">
-                  Email {emailToConfirm} chưa được xác nhận. Vui lòng kiểm tra hộp thư hoặc
-                  <button type="button" className="underline ml-1" onClick={resendConfirmation} disabled={loading}>
-                    gửi lại email xác nhận
-                  </button>.
-                </div>
-              )}
               <div className="space-y-2">
                 <Label htmlFor="login-email" className="text-black text-sm">Email</Label>
                 <div className="relative">
@@ -124,7 +92,10 @@ function AuthPageContent() {
                 </div>
               </div>
               <Button type="submit" className="w-full h-11 text-sm bg-black hover:bg-gray-800" disabled={loading}>{loading? 'Đang đăng nhập...':'Đăng nhập'}</Button>
-              
+              <div className="space-y-2">
+                <Button type="button" variant="outline" className="w-full h-11 text-sm" onClick={()=>signInWithGoogle()}><Chrome className="mr-2 h-4 w-4"/>Đăng nhập với Google</Button>
+                <Button type="button" variant="outline" className="w-full h-11 text-sm" onClick={()=>signInWithFacebook()}><Facebook className="mr-2 h-4 w-4"/>Đăng nhập với Facebook</Button>
+              </div>
             </form>
           ) : (
             <form onSubmit={handleRegister} className="space-y-6">
@@ -177,7 +148,10 @@ function AuthPageContent() {
                 </div>
               </div>
               <Button type="submit" className="w-full h-11 text-sm bg-black hover:bg-gray-800" disabled={loading}>{loading? 'Đang tạo tài khoản...':'Tạo tài khoản'}</Button>
-              
+              <div className="space-y-2">
+                <Button type="button" variant="outline" className="w-full h-11 text-sm" onClick={()=>signInWithGoogle()}><Chrome className="mr-2 h-4 w-4"/>Đăng ký với Google</Button>
+                <Button type="button" variant="outline" className="w-full h-11 text-sm" onClick={()=>signInWithFacebook()}><Facebook className="mr-2 h-4 w-4"/>Đăng ký với Facebook</Button>
+              </div>
             </form>
           )}
         </div>

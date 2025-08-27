@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -31,6 +31,14 @@ type MFAStep = "code" | "invalid" | "fallback" | "success" | "locked" | "enroll"
 type FallbackMethod = "backup" | "email" | "hardware"
 
 export default function VerifyMFAPage() {
+  return (
+    <Suspense fallback={null}>
+      <VerifyMFAPageContent />
+    </Suspense>
+  )
+}
+
+function VerifyMFAPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const returnTo = searchParams.get("returnTo") || "/dashboard"

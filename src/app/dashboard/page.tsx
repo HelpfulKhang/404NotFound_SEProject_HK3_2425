@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, Suspense } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -44,6 +44,14 @@ type PendingArticle = {
 }
 
 export default function DashboardPage() {
+  return (
+    <Suspense fallback={null}>
+      <DashboardPageContent />
+    </Suspense>
+  )
+}
+
+function DashboardPageContent() {
   const { user, profile } = useAuth()
   const userRole = profile?.role
   const searchParams = useSearchParams()
